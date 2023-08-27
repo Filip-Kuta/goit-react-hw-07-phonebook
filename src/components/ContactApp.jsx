@@ -1,7 +1,6 @@
-// ContactApp.js
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContact, deleteContact, setFilter, resetContacts, fetchContacts } from './contactsSlice';
+import { addContact, deleteContact, fetchContacts, setFilter, resetContacts } from './contactsSlice';
 import { nanoid } from 'nanoid';
 import './ContactApp.css';
 
@@ -50,7 +49,7 @@ function ContactApp() {
 
   const handleFilterChange = (event) => {
     const { value } = event.target;
-    dispatch(setFilter(value));
+    dispatch(setFilter(value)); // Aktualizuj filtrowanie w Redux Store
   };
 
   const handleDeleteContact = (id) => {
@@ -74,18 +73,14 @@ function ContactApp() {
     return formattedNumber;
   };
 
-  // const loadContactsFromLocalStorage = () => {
-  //   const storedContacts = localStorage.getItem('contacts');
-  //   return storedContacts ? JSON.parse(storedContacts) : [];
-  // };
-
   const saveContactsToLocalStorage = (contacts) => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   };
 
   const filteredContacts = contacts.filter(
     (contact) =>
-      contact.surname.toLowerCase().includes(filter.toLowerCase())
+      contact.surname.toLowerCase().includes(filter.toLowerCase()) ||
+      contact.number.includes(filter) // Dodaj filtrację po numerze telefonu
   );
 
   return (
@@ -127,7 +122,7 @@ function ContactApp() {
       <h2>Contacts</h2>
       <input
         type="text"
-        placeholder="Search by surname"
+        placeholder="Search by surname or number" // Zaktualizowano placeholder
         value={filter}
         onChange={handleFilterChange}
       />
